@@ -10,7 +10,7 @@ public class ProductService {
 
         if(product.getPrice() < 0 || product.getStock() < 0) throw new RuntimeException("The price and stock cannot be 0 or less");
 
-        if(productRepository.getProductNames().contains(product.getName())) throw new RuntimeException("The product already exists!");
+        if(product.getName().equals(product.getName()) ) throw new RuntimeException("The product already exists!");
 
         if(product.getName().isEmpty()) throw new RuntimeException("The inputs cannot be empty");
 
