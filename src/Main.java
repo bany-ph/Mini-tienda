@@ -2,17 +2,20 @@ import model.Product;
 import services.ProductService;
 
 import javax.swing.*;
-import java.util.InputMismatchException;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         ProductService service = new ProductService();
         try {
             service.addProduct(new Product("Arroz",26000 , 20));
+
             service.addProduct(new Product("Arroz de coco",36000 , 10));
-            service.addProduct(new Product("Arroz con leche", 45000,34));
-            service.addProduct(new Product("Arroz con leche", 47000,34));
-        } catch (Exception e) {
+            service.addProduct(new Product("Carne",50000 , 40));
+            service.addProduct(new Product("Carne",50000 , 40));
+            service.addProduct(new Product("Carne",50000 , 40));
+
+        }
+        catch (Exception e) {
             System.out.println(e.getMessage());
         }
 

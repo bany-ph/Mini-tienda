@@ -8,16 +8,23 @@ public class ProductService {
 
     public void addProduct(Product product)  {
 
-        if(product.getPrice() < 0 || product.getStock() < 0) throw new RuntimeException("The price and stock cannot be 0 or less");
+        if(product.getPrice() < 0 || product.getStock() < 0) {
+            throw new RuntimeException("The price and stock cannot be 0 or less");
+        }
 
-        if(product.getName().equals(product.getName()) ) throw new RuntimeException("The product already exists!");
+        if(product.getName().isEmpty()) {
+            throw new RuntimeException("The inputs cannot be empty");
+        }
 
-        if(product.getName().isEmpty()) throw new RuntimeException("The inputs cannot be empty");
+        // Change the product name to lowerCase
+        String productNameLower = product.getName().toLowerCase();
 
+        if(productRepository.getProductNames().contains(productNameLower)) {
+            throw new IllegalArgumentException("The product already exists!");
+        }
 
-
-        // if each input is correct then → add product
-        productRepository.save(product.getName().toLowerCase(),product.getPrice(),product.getStock());
+        // Save
+        productRepository.save(productNameLower, product.getPrice(), product.getStock());
     }
 
 
