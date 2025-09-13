@@ -1,40 +1,68 @@
 import model.Product;
+import repository.CartRepository;
+import services.CartService;
 import services.ProductService;
 
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        ProductService service = new ProductService();
-        try {
-            service.addProduct(new Product("Arroz",26000 , 20));
+        Views views = new Views();
+        boolean running = true;
+        while(running){
+            try {
+                String[] options = {
+                        "1. Agregar producto",
+                        "2. Listar inventario",
+                        "3. Comprar producto",
+                        "4. Mostrar estadísticas (más barato y más caro)",
+                        "5. Buscar producto por nombre",
+                        "6. Salir con ticket final",
+                };
 
-            service.addProduct(new Product("Arroz de coco",36000 , 10));
-            service.addProduct(new Product("Carne",50000 , 40));
-            service.addProduct(new Product("Carne",50000 , 40));
-            service.addProduct(new Product("Carne",50000 , 40));
+                String choice = (String) JOptionPane.showInputDialog(
+                        null,
+                        "=== MENU ===\nSeleccione una opción:",
+                        "MENU",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
 
+                switch (choice) {
+                    case "1. Agregar producto":
+                        views.viewAddProduct();
+                        break;
+                    case "2. Listar inventario":
+                        views.viewListProducts();
+                        break;
+                    case "3. Comprar producto":
+                        views.viewAddProductToCart();
+                        break;
+                    case "Mostrar estadísticas":
+                        break;
+                    case "5. Buscar producto por nombre":
+                        break;
+                    case "6. Salir con ticket final":
+                        System.out.println("Bye");
+                        running = false;
+                        break;
+
+                }
+
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        e.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
         }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        System.out.println(service.getAllProducts());
-
     }
 
 
-    static void menu(){
-        System.out.println("""
-                    -- MENU -- 
-                    
-                1. Agregar producto.
-                2. Listar inventario.
-                3. Comprar producto.
-                4. Mostrar estadísticas (más barato y más caro).
-                5. Buscar producto por nombre.
-                6. Salir con ticket final.
-                
-                """);
-    }
+
 }

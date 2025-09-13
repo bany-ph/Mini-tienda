@@ -20,7 +20,7 @@ public class FakeDataBase {
     }
 
     public void setProducts(String productName, Integer stock) {
-       products.put(productName,stock);
+        products.put(productName,stock);
     }
 
     public ArrayList<String> getProductsName() {

@@ -3,6 +3,10 @@ package services;
 import model.Product;
 import repository.ProductRepository;
 
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 public class ProductService {
     private final ProductRepository productRepository = new ProductRepository();
 
@@ -29,26 +33,37 @@ public class ProductService {
 
 
 
-    public String getAllProducts(){
-        StringBuilder res = new StringBuilder();
-        for (int i = 0; i < productRepository.getProducts().size() ; i++) {
-            res.append(String.format("%-20s %s,  %s \n", productRepository.getProductNames().get(i).toUpperCase() ,
-                    productRepository.getPrices()[i], productRepository.getProducts().get(productRepository.getProductNames().get(i))));
-
-        }
-        return res.toString();
+    public ArrayList<Product> getAllProducts(){
+        // return all products
+        return (ArrayList<Product>) productRepository.getProducts().entrySet().stream()
+                .map(entry -> new Product(entry.getKey(), productRepository.getPrices()[productRepository.getProductNames().indexOf(entry.getKey())],
+                        entry.getValue()))
+                .collect(Collectors.toList());
     }
 
-    public String findProductByName(String productName){
-        productName = productName.toLowerCase();
-        StringBuilder res = new StringBuilder();
-        for (int i = 0; i < productRepository.getProducts().size() ; i++) {
-            if(productRepository.getProductNames().get(i).toLowerCase().contains(productName)){
-                res.append(String.format("%-20s %s,  %s \n", productRepository.getProductNames().get(i).toUpperCase() ,
-                       productRepository.getPrices()[i], productRepository.getProducts().get(productName)));
-            }
-        }
-        return res.toString();
+    public ArrayList<Product> getAllPartiallyProducts(String productName){
+        /*
+         *  .filter → if each product from productRepository.getProducts() contains productName, then ↓
+         *  .map → creates a new Product object with the data saved in fakeDatabase and returns it ↓
+         *  .toList → returns a list of Product objects returned by the map function
+         * */
+        return (ArrayList<Product>) productRepository.getProducts().entrySet().stream()
+                .filter(entry -> entry.getKey().toLowerCase().contains(productName.toLowerCase()))
+                .map(entry -> new Product(entry.getKey(), productRepository.getPrices()[productRepository.getProductNames().indexOf(entry.getKey())],
+                        entry.getValue()))
+                .collect(Collectors.toList());
+    }
+
+    public Optional<Product> findProductByName(String productName){
+        productName = productName.toLowerCase().trim();
+        return productRepository.getProducts().containsKey(productName) ?
+                Optional.of(new Product(productName, productRepository.getPrices()[productRepository.getProductNames().indexOf(productName)],
+                        productRepository.getProducts().get(productName)))
+                : Optional.empty();
+    }
+
+    public Optional<Product> getProductByName(String name){
+        return productRepository.getProductByName(name);
     }
 
 

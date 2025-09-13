@@ -32,7 +32,7 @@ public class Product {
         return price;
     }
 
-    public Integer getStock() {
+    public int getStock() {
         return stock;
     }
 }
