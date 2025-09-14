@@ -30,6 +30,8 @@ public class Main {
                         options[0]
                 );
 
+                if (choice == null) break;
+
                 switch (choice) {
                     case "1. Agregar producto":
                         views.viewAddProduct();
@@ -43,15 +45,14 @@ public class Main {
                     case "Mostrar estadísticas":
                         break;
                     case "5. Buscar producto por nombre":
+                        views.viewListProductsByName();
                         break;
                     case "6. Salir con ticket final":
-                        System.out.println("Bye");
+                        views.viewFinalTicket();
                         running = false;
                         break;
 
                 }
-
-
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(
                         null,

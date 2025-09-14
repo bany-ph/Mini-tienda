@@ -34,7 +34,8 @@ public class ProductRepository {
     }
 
     public void updateStock(String name, int stock){
-        db.getProducts().put(name,db.getProducts().get(name) + stock);
+        db.getProducts().put(name,stock);
+
     }
     public HashMap<String,Integer> getProducts(){
         return db.getProducts();

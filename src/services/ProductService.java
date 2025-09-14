@@ -22,10 +22,10 @@ public class ProductService {
 
         // Change the product name to lowerCase
         String productNameLower = product.getName().toLowerCase();
-
         if(productRepository.getProductNames().contains(productNameLower)) {
             throw new IllegalArgumentException("The product already exists!");
         }
+
 
         // Save
         productRepository.save(productNameLower, product.getPrice(), product.getStock());
@@ -52,6 +52,7 @@ public class ProductService {
                 .map(entry -> new Product(entry.getKey(), productRepository.getPrices()[productRepository.getProductNames().indexOf(entry.getKey())],
                         entry.getValue()))
                 .collect(Collectors.toList());
+            
     }
 
     public Optional<Product> findProductByName(String productName){
@@ -66,7 +67,13 @@ public class ProductService {
         return productRepository.getProductByName(name);
     }
 
+    public void updateStock(String name, int stock){
+        int newStock = findProductByName(name).get().getStock() - stock;
 
+        if(newStock < 0) throw new RuntimeException("Out of Stock!");
+
+        productRepository.updateStock(name,newStock);
+    }
 
 
 }

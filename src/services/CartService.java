@@ -19,24 +19,23 @@ public class CartService {
 
     public void addProductToCart(String name, int quantity) {
         Optional<Product> product = productService.getProductByName(name);
+        Optional<CartItem> cartItem = cartRepository.findCartItemByName(name);
         if(product.isPresent()) {
             if(quantity <= 0) {
                 throw new IllegalArgumentException("The quantity must be greater than 0");
             }
-            if (product.get().getStock() < quantity) {
+            if ( quantity > product.get().getStock() ) {
                 throw new IllegalArgumentException("Out of stock!");
             }
 
-            Optional<CartItem> cartItem = cartRepository.findCartItemByName(name);
             if(cartItem.isPresent()) {
-
-                int newQuantity = cartItem.get().getQuantity() + quantity;
-                cartItem.get().setQuantity(newQuantity);
+                int newQuantityCart = cartItem.get().getQuantity() + quantity;
+                cartItem.get().setQuantity(newQuantityCart);
                 cartRepository.updateTotalPriceByItem(cartItem.get());
-                product.get().setStock(product.get().getStock() - newQuantity);
             }else{
                 cartRepository.save(new CartItem(product.get(),quantity));
             }
+            productService.updateStock(name,quantity);
         }else{
             throw new RuntimeException("The Product does not exist");
         }
@@ -44,7 +43,9 @@ public class CartService {
 
     }
 
-
+    public double getTotalCart(){
+        return cartRepository.getTotalPrice();
+    }
     public ArrayList<CartItem> getAllItemsFromCart(){
         return cartRepository.getCartItems();
     }
