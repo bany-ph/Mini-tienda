@@ -1,7 +1,4 @@
-import model.Product;
-import repository.CartRepository;
-import services.CartService;
-import services.ProductService;
+import views.Views;
 
 import javax.swing.*;
 
@@ -22,7 +19,7 @@ public class Main {
 
                 String choice = (String) JOptionPane.showInputDialog(
                         null,
-                        "=== MENU ===\nSeleccione una opción:",
+                        "\nSeleccione una opción:",
                         "MENU",
                         JOptionPane.QUESTION_MESSAGE,
                         null,

@@ -1,15 +1,17 @@
-import model.Product;
+package views;
+
 import services.CartService;
 import services.ProductService;
 
 import javax.swing.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+
 
 public class Views {
     private final DecimalFormat currencyFormat = new DecimalFormat("#,##0.00");
     private ProductService productService;
     private CartService cartService;
+
     public Views(){
         productService = new ProductService();
         cartService = new CartService(productService);
@@ -24,7 +26,6 @@ public class Views {
                     "Agregar Producto",
                     JOptionPane.QUESTION_MESSAGE
             );
-
             String quantityStr = JOptionPane.showInputDialog(
                     null,
                     "Ingrese la cantidad:",
@@ -55,7 +56,16 @@ public class Views {
 
     public void viewAddProduct(){
         try{
-
+            String[] options = {"Electrodomestico", "Alimento"};
+            String choice = (String) JOptionPane.showInputDialog(
+                    null,
+                    "\nSeleccione una opción:",
+                    "MENU",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
             String productNameStr = JOptionPane.showInputDialog(
                     null,
                     "Ingrese el nombre del producto",
@@ -76,12 +86,7 @@ public class Views {
                     "Agregar Producto",
                     JOptionPane.QUESTION_MESSAGE
             );
-
-
-            int stock = Integer.parseInt(stockStr);
-            double price = Double.parseDouble(priceStr);
-
-            productService.addProduct(new Product(productNameStr, price,stock));
+            productService.addProduct(productNameStr,priceStr,stockStr,choice);
 
             JOptionPane.showMessageDialog(
                     null,
@@ -103,14 +108,17 @@ public class Views {
     public void viewListProducts(){
         StringBuilder sbSimple = productListFormat();
         productService.getAllProducts().forEach(product ->
-                sbSimple.append(String.format("| %-30s | $%17s | %7d |\n",
+                sbSimple.append(String.format("| %-30s | %-19s | $%18s | %8d |\n",
                         product.getName().length() > 30 ?
                                 product.getName().substring(0, 27) + "..." :
                                 product.getName(),
+                        product.getDescription().length() > 16 ?
+                        product.getDescription().substring(0,17) + "..." :
+                        product.getDescription(),
                         currencyFormat.format(product.getPrice()),
                         product.getStock()))
         );
-        sbSimple.append("+--------------------------------+---------------------+---------+");
+        sbSimple.append("+--------------------------------+---------------------+---------------------+----------+");
         sbSimple.append("</pre></html>");
         JOptionPane.showMessageDialog(
                 null,
@@ -131,14 +139,15 @@ public class Views {
                     JOptionPane.QUESTION_MESSAGE
             );
             productService.getAllPartiallyProducts(productNameStr).forEach(product ->
-                    sbSimple.append(String.format("| %-30s | $%17s | %7d |\n",
+                    sbSimple.append(String.format("| %-30s | %-19s | $%18s | %8d |\n",
                             product.getName().length() > 30 ?
                                     product.getName().substring(0, 27) + "..." :
                                     product.getName(),
+                            product.getDescription(),
                             currencyFormat.format(product.getPrice()),
                             product.getStock()))
             );
-            sbSimple.append("+--------------------------------+---------------------+---------+");
+            sbSimple.append("+--------------------------------+---------------------+---------------------+----------+");
             sbSimple.append("</pre></html>");
             JOptionPane.showMessageDialog(
                     null,
@@ -160,14 +169,14 @@ public class Views {
     public void viewFinalTicket(){
         StringBuilder sbSimple = productListFormat();
         cartService.getAllItemsFromCart().forEach(product ->
-                sbSimple.append(String.format("| %-30s | $%17s | %7d |\n",
+                sbSimple.append(String.format("| %-30s | %-19s | $%18s | %8d |\n",
                         product.getProduct().getName().length() > 30 ?
                                 product.getProduct().getName().substring(0, 27) + "..." :
                                 product.getProduct().getName(),
                         currencyFormat.format(product.getProduct().getPrice()),
                         product.getProduct().getStock()))
         );
-        sbSimple.append("+--------------------------------+---------------------+---------+\n\n");
+        sbSimple.append("+--------------------------------+---------------------+---------------------+----------+\n\n");
         sbSimple.append(String.format("%-30s %30s","TOTAL →", cartService.getTotalCart()));
         sbSimple.append("</pre></html>");
         JOptionPane.showMessageDialog(
@@ -184,9 +193,9 @@ public class Views {
         StringBuilder sbSimple = new StringBuilder();
 
         sbSimple.append("<html><pre style='font-family: monospace; font-size: 12px;'>");
-        sbSimple.append("+--------------------------------+---------------------+---------+\n");
-        sbSimple.append("| PRODUCTO                       |       PRECIO        |  STOCK  |\n");
-        sbSimple.append("+--------------------------------+---------------------+---------+\n");
+        sbSimple.append("+--------------------------------+---------------------+---------------------+----------+\n");
+        sbSimple.append("| PRODUCTO                       |     DESCRIPCIÓN     |       PRECIO        |  STOCK   |\n");
+        sbSimple.append("+--------------------------------+---------------------+---------------------+----------+\n");
 
         return sbSimple;
     }

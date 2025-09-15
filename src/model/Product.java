@@ -1,6 +1,6 @@
 package model;
 
-public class Product {
+public abstract class Product {
     private String name;
     private double price;
     private int stock;
@@ -35,4 +35,6 @@ public class Product {
     public int getStock() {
         return stock;
     }
+
+    public abstract String getDescription();
 }

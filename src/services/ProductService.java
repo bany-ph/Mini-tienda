@@ -1,5 +1,7 @@
 package services;
 
+import model.FoodStuff;
+import model.HouseHold;
 import model.Product;
 import repository.ProductRepository;
 
@@ -10,57 +12,49 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository = new ProductRepository();
 
-    public void addProduct(Product product)  {
+    public void addProduct(String name, String strPrice, String strStock, String choice)  {
+        double price = Double.parseDouble(strPrice);
+        int stock = Integer.parseInt(strStock);
+        // Change the product name to lowerCase
+        String productNameLower = name.toLowerCase();
 
-        if(product.getPrice() < 0 || product.getStock() < 0) {
+        if( price < 0 || stock < 0) {
             throw new RuntimeException("The price and stock cannot be 0 or less");
         }
 
-        if(product.getName().isEmpty()) {
+        if(name.isEmpty()) {
             throw new RuntimeException("The inputs cannot be empty");
         }
 
-        // Change the product name to lowerCase
-        String productNameLower = product.getName().toLowerCase();
-        if(productRepository.getProductNames().contains(productNameLower)) {
+        if(productRepository.getProductByName(productNameLower).isPresent()) {
             throw new IllegalArgumentException("The product already exists!");
         }
 
+        if (choice == null) throw new RuntimeException("Select what type of product you want to add");
 
-        // Save
-        productRepository.save(productNameLower, product.getPrice(), product.getStock());
+        Product newProduct;
+        if(choice.equalsIgnoreCase("Electrodomestico")){
+            newProduct = new HouseHold(name,price,stock);
+        } else {
+            newProduct = new FoodStuff(name,price,stock);
+        }
+        productRepository.save(newProduct);
+
     }
-
 
 
     public ArrayList<Product> getAllProducts(){
         // return all products
-        return (ArrayList<Product>) productRepository.getProducts().entrySet().stream()
-                .map(entry -> new Product(entry.getKey(), productRepository.getPrices()[productRepository.getProductNames().indexOf(entry.getKey())],
-                        entry.getValue()))
-                .collect(Collectors.toList());
+        return productRepository.getAllProducts();
     }
 
     public ArrayList<Product> getAllPartiallyProducts(String productName){
-        /*
-         *  .filter → if each product from productRepository.getProducts() contains productName, then ↓
-         *  .map → creates a new Product object with the data saved in fakeDatabase and returns it ↓
-         *  .toList → returns a list of Product objects returned by the map function
-         * */
-        return (ArrayList<Product>) productRepository.getProducts().entrySet().stream()
-                .filter(entry -> entry.getKey().toLowerCase().contains(productName.toLowerCase()))
-                .map(entry -> new Product(entry.getKey(), productRepository.getPrices()[productRepository.getProductNames().indexOf(entry.getKey())],
-                        entry.getValue()))
-                .collect(Collectors.toList());
-            
+        return productRepository.getAllProducts().isEmpty() ? new ArrayList<>()
+                : (ArrayList<Product>) getAllProducts().stream().filter(entry -> entry.getName().contains(productName));
     }
 
     public Optional<Product> findProductByName(String productName){
-        productName = productName.toLowerCase().trim();
-        return productRepository.getProducts().containsKey(productName) ?
-                Optional.of(new Product(productName, productRepository.getPrices()[productRepository.getProductNames().indexOf(productName)],
-                        productRepository.getProducts().get(productName)))
-                : Optional.empty();
+        return productRepository.getProductByName(productName);
     }
 
     public Optional<Product> getProductByName(String name){

@@ -46,6 +46,7 @@ public class CartService {
     public double getTotalCart(){
         return cartRepository.getTotalPrice();
     }
+
     public ArrayList<CartItem> getAllItemsFromCart(){
         return cartRepository.getCartItems();
     }
