@@ -39,7 +39,8 @@ public class Main {
                     case "3. Comprar producto":
                         views.viewAddProductToCart();
                         break;
-                    case "Mostrar estadísticas":
+                    case "4. Mostrar estadísticas (más barato y más caro)":
+                        views.viewGetMinAndMaxPrice();
                         break;
                     case "5. Buscar producto por nombre":
                         views.viewListProductsByName();

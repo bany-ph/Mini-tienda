@@ -8,6 +8,6 @@ public class FoodStuff extends Product {
 
     @Override
     public String getDescription() {
-        return "This is a fruit";
+        return "This is food";
     }
 }

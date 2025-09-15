@@ -8,7 +8,7 @@ import java.util.Optional;
 
 
 public class ProductRepository {
-    private ArrayList<Product> products;
+    private final ArrayList<Product> products;
 
     public ProductRepository(){
         products = new ArrayList<>();

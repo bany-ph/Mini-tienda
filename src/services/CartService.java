@@ -18,12 +18,13 @@ public class CartService {
     }
 
     public void addProductToCart(String name, int quantity) {
+        if(quantity <= 0) {
+            throw new IllegalArgumentException("The quantity must be greater than 0");
+        }
+
         Optional<Product> product = productService.getProductByName(name);
         Optional<CartItem> cartItem = cartRepository.findCartItemByName(name);
         if(product.isPresent()) {
-            if(quantity <= 0) {
-                throw new IllegalArgumentException("The quantity must be greater than 0");
-            }
             if ( quantity > product.get().getStock() ) {
                 throw new IllegalArgumentException("Out of stock!");
             }

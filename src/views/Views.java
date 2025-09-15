@@ -1,5 +1,6 @@
 package views;
 
+import model.Product;
 import services.CartService;
 import services.ProductService;
 
@@ -26,6 +27,7 @@ public class Views {
                     "Agregar Producto",
                     JOptionPane.QUESTION_MESSAGE
             );
+            if (cartNameStr == null) {return;}
             String quantityStr = JOptionPane.showInputDialog(
                     null,
                     "Ingrese la cantidad:",
@@ -66,6 +68,8 @@ public class Views {
                     options,
                     options[0]
             );
+
+            if (choice == null) {return;}
             String productNameStr = JOptionPane.showInputDialog(
                     null,
                     "Ingrese el nombre del producto",
@@ -104,6 +108,41 @@ public class Views {
         }
     }
 
+    public void viewGetMinAndMaxPrice(){
+        try{
+            StringBuilder sbSimple = productListFormat();
+
+            Product mostExpensive = productService.getMostExpensiveProduct();
+            Product mostCheaper = productService.getMostCheaperProduct();
+            sbSimple.append(String.format("| %-30s | %-19s | $%18s | %8d |\n",
+                    mostExpensive.getName(),
+                    mostExpensive.getDescription(),
+                    mostExpensive.getPrice(),
+                    mostExpensive.getStock()));
+            sbSimple.append(String.format("| %-30s | %-19s | $%18s | %8d |\n",
+                    mostCheaper.getName(),
+                    mostCheaper.getDescription(),
+                    mostCheaper.getPrice(),
+                    mostCheaper.getStock()));
+
+            sbSimple.append("+--------------------------------+---------------------+---------------------+----------+");
+            sbSimple.append("</pre></html>");
+
+            JOptionPane.showMessageDialog(
+                    null,
+                        sbSimple.toString(),
+                    "Producto Más caro y barato",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(
+                    null,
+                    e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
 
     public void viewListProducts(){
         StringBuilder sbSimple = productListFormat();
@@ -112,8 +151,6 @@ public class Views {
                         product.getName().length() > 30 ?
                                 product.getName().substring(0, 27) + "..." :
                                 product.getName(),
-                        product.getDescription().length() > 16 ?
-                        product.getDescription().substring(0,17) + "..." :
                         product.getDescription(),
                         currencyFormat.format(product.getPrice()),
                         product.getStock()))
@@ -173,11 +210,12 @@ public class Views {
                         product.getProduct().getName().length() > 30 ?
                                 product.getProduct().getName().substring(0, 27) + "..." :
                                 product.getProduct().getName(),
+                        product.getProduct().getDescription(),
                         currencyFormat.format(product.getProduct().getPrice()),
                         product.getProduct().getStock()))
         );
         sbSimple.append("+--------------------------------+---------------------+---------------------+----------+\n\n");
-        sbSimple.append(String.format("%-30s %30s","TOTAL →", cartService.getTotalCart()));
+        sbSimple.append(String.format("%-30s %30s","TOTAL →", currencyFormat.format(cartService.getTotalCart())));
         sbSimple.append("</pre></html>");
         JOptionPane.showMessageDialog(
                 null,

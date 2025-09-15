@@ -6,6 +6,7 @@ import model.Product;
 import repository.ProductRepository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,12 @@ public class ProductService {
         productRepository.save(newProduct);
 
     }
-
+    public Product getMostExpensiveProduct(){
+        return productRepository.getAllProducts().stream().max(Comparator.comparing(Product::getPrice)).orElseThrow();
+    }
+    public Product getMostCheaperProduct(){
+        return productRepository.getAllProducts().stream().min(Comparator.comparing(Product::getPrice)).orElseThrow();
+    }
 
     public ArrayList<Product> getAllProducts(){
         // return all products
@@ -49,8 +55,9 @@ public class ProductService {
     }
 
     public ArrayList<Product> getAllPartiallyProducts(String productName){
-        return productRepository.getAllProducts().isEmpty() ? new ArrayList<>()
-                : (ArrayList<Product>) getAllProducts().stream().filter(entry -> entry.getName().contains(productName));
+        return productRepository.getAllProducts().stream()
+                .filter(product -> product.getName().contains(productName))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public Optional<Product> findProductByName(String productName){
