@@ -1,7 +1,9 @@
 package org.app.repository;
 
 
-import model.CartItem;
+
+
+import org.app.model.CartItem;
 
 import java.util.ArrayList;
 import java.util.Optional;

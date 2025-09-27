@@ -1,9 +1,11 @@
 package org.app.services;
 
-import model.FoodStuff;
-import model.HouseHold;
-import model.Product;
-import repository.ProductRepository;
+
+
+import org.app.model.FoodStuff;
+import org.app.model.HouseHold;
+import org.app.model.Product;
+import org.app.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -1,7 +1,8 @@
 package org.app.repository;
 
 
-import model.Product;
+
+import org.app.model.Product;
 
 import java.util.ArrayList;
 import java.util.Optional;

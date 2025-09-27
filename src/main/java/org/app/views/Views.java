@@ -1,8 +1,9 @@
 package org.app.views;
 
-import model.Product;
-import services.CartService;
-import services.ProductService;
+
+import org.app.model.Product;
+import org.app.services.CartService;
+import org.app.services.ProductService;
 
 import javax.swing.*;
 import java.text.DecimalFormat;
