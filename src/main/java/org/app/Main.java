@@ -1,4 +1,5 @@
-import views.Views;
+package org.app;
+import org.app.views.Views;
 
 import javax.swing.*;
 
