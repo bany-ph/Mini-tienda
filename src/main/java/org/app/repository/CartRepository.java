@@ -1,4 +1,4 @@
-package repository;
+package org.app.repository;
 
 
 import model.CartItem;

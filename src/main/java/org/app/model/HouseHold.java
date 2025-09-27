@@ -1,4 +1,4 @@
-package model;
+package org.app.model;
 
 public class HouseHold extends Product{
 

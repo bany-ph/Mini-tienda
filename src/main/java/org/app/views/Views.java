@@ -1,4 +1,4 @@
-package views;
+package org.app.views;
 
 import model.Product;
 import services.CartService;
