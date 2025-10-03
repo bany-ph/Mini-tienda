@@ -1,11 +1,18 @@
-package org.app.model;
+package org.app.entity;
 
-public abstract class Product {
+public  class Product {
+    private int id;
     private String name;
     private double price;
     private int stock;
 
     public Product(String name, double price, int stock){
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+    }
+    public Product(int id,String name, double price, int stock){
+        this.id = id;
         this.name = name;
         this.price = price;
         this.stock = stock;
@@ -36,5 +43,11 @@ public abstract class Product {
         return stock;
     }
 
-    public abstract String getDescription();
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

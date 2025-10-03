@@ -1,4 +1,4 @@
-package org.app.model;
+package org.app.entity;
 
 
 public class CartItem {
@@ -12,12 +12,9 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
-        return product;
-    }
 
+    public Product getProduct() {return product;}
     public double getTotalPrice() {return totalPrice;}
-
     public int getQuantity() {return quantity;}
     public void setQuantity(int quantity) {this.quantity = quantity;}
     public void setTotalPrice(double totalPrice) {this.totalPrice = totalPrice;}
